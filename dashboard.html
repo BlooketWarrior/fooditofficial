@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard | Foodit</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      background-color: #ffb74d;
+      color: #111;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background-color: #db6a00;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+
+    nav a.active {
+      background-color: #db6a00;
+      color: black;
+    }
+
+    input[type="text"] {
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .profile {
+      margin-left: 16px;
+      font-weight: 500;
+      color: #000;
+      background: #fff3e0;
+      padding: 6px 12px;
+      border-radius: 6px;
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background-color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      min-width: 160px;
+      z-index: 1;
+      border-radius: 6px;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #ddd;
+    }
+
+    .profile:hover .dropdown-content {
+      display: block;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      margin-top: 80px;
+      padding: 0 20px 40px;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .content img {
+      width: 120px;
+      height: auto;
+    }
+
+    .title {
+      font-size: 42px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .description {
+      font-size: 17px;
+      color: #333;
+      max-width: 600px;
+      margin: 16px auto 32px;
+      line-height: 1.6;
+    }
+
+    .new-kit-btn {
+      background-color: #db6a00;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      margin-bottom: 30px;
+    }
+
+    .new-kit-btn:hover {
+      background-color: #b35900;
+    }
+
+    .kit-list {
+      width: 100%;
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .kit-item {
+      background: #fff3e0;
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .kit-details {
+      max-width: 60%;
+    }
+
+    .kit-item h2 {
+      margin: 0 0 8px 0;
+      font-size: 22px;
+      color: #db6a00;
+    }
+
+    .kit-meta {
+      font-size: 14px;
+      color: #555;
+    }
+
+    .kit-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+      max-width: 35%;
+      justify-content: flex-end;
+    }
+
+    button {
+      background-color: #db6a00;
+      border: none;
+      color: white;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 8px 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background-color: #b35900;
+    }
+
+    .play-dropdown {
+      position: relative;
+      background-color: #db6a00;
+      border-radius: 6px;
+      padding: 8px 14px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .play-menu {
+      display: none;
+      position: absolute;
+      top: 110%;
+      right: 0;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+      z-index: 10;
+      min-width: 140px;
+    }
+
+    .play-menu a {
+      display: block;
+      padding: 10px 14px;
+      color: #db6a00;
+      text-decoration: none;
+    }
+
+    .play-menu a:hover {
+      background-color: #ffe0b2;
+      color: #a64d00;
+    }
+
+    .empty-message {
+      font-size: 18px;
+      color: #333;
+      margin-top: 40px;
+    }
+
+    @media(max-width: 600px) {
+      .kit-details, .kit-actions {
+        max-width: 100%;
+        justify-content: center;
+        margin-top: 10px;
+      }
+      .kit-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">FOODIT</div>
+    <nav>
+      <a href="dashboard.html" class="active">Kits</a>
+      <a href="reports.html">Reports</a>
+      <a href="assignments.html">Assignments</a>
+      <a href="classes.html">Classes</a>
+      <a href="market.html">Market</a>
+      <a href="foodles.html">Foodles</a>
+      <a href="play.html">Play</a>
+      <a href="pass.html">Pass</a>
+      <input type="text" placeholder="Search for kits..." />
+      <div class="profile">👤 <span id="profile-name">Guest</span>
+        <div class="dropdown-content">
+          <a href="settings.html" id="settings-link">Settings</a>
+          <a href="#" id="logout-link">Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="content">
+    <img src="https://cdn-icons-png.flaticon.com/512/2965/2965567.png" alt="Kit Icon" />
+    <div class="title">Sets</div>
+    <div class="description">
+      Sets are a playable and studying use to help your knowledge grow.
+    </div>
+    <a href="https://foodit-official.glitch.me/create-sets.html" class="new-kit-btn">➕ New Kit</a>
+
+    <div class="kit-list" id="kit-list"></div>
+  </div>
+
+  <script>
+    const savedName = localStorage.getItem("fooditUsername");
+    if (savedName) {
+      document.getElementById("profile-name").textContent = savedName;
+    }
+
+    document.getElementById("logout-link").addEventListener("click", function () {
+      localStorage.clear();
+      alert("You have logged out.");
+      window.location.href = "https://foodit-game.glitch.me";
+    });
+
+    function renderKits() {
+      const kitListEl = document.getElementById("kit-list");
+      kitListEl.innerHTML = "";
+
+      let savedKits = [];
+      try {
+        savedKits = JSON.parse(localStorage.getItem("savedKits")) || [];
+      } catch (e) {
+        console.error("Error parsing saved kits JSON", e);
+      }
+
+      if (savedKits.length === 0) {
+        kitListEl.innerHTML = '<div class="empty-message">No kits created yet. Click "New Kit" to get started!</div>';
+        return;
+      }
+
+      savedKits.forEach((kit, index) => {
+        const kitEl = document.createElement("div");
+        kitEl.classList.add("kit-item");
+
+        const detailsEl = document.createElement("div");
+        detailsEl.classList.add("kit-details");
+        detailsEl.innerHTML = `
+          <h2>${kit.name}</h2>
+          <div class="kit-meta">
+            Language: <strong>${kit.language}</strong> | Subject: <strong>${kit.subject}</strong> | Questions: <strong>${kit.questions.length}</strong>
+          </div>
+        `;
+
+        const actionsEl = document.createElement("div");
+        actionsEl.classList.add("kit-actions");
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.addEventListener("click", () => {
+          window.location.href = `https://foodit-official.glitch.me/create-sets.html?editIndex=${index}`;
+        });
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.style.backgroundColor = "#c62828";
+        deleteBtn.addEventListener("click", () => {
+          if (confirm(`Are you sure you want to delete the kit "${kit.name}"?`)) {
+            savedKits.splice(index, 1);
+            localStorage.setItem("savedKits", JSON.stringify(savedKits));
+            renderKits();
+          }
+        });
+
+        const playDropdown = document.createElement("div");
+        playDropdown.classList.add("play-dropdown");
+        playDropdown.innerHTML = `▶ Play ▼`;
+
+        const playMenu = document.createElement("div");
+        playMenu.classList.add("play-menu");
+
+        ["Solo", "Host"].forEach(mode => {
+          const modeSlug = mode.toLowerCase();
+          const link = document.createElement("a");
+          link.href = `https://foodit-official.glitch.me/solo.html?editIndex=${index}`;
+          link.textContent = mode;
+          playMenu.appendChild(link);
+        });
+
+        playDropdown.appendChild(playMenu);
+        playDropdown.addEventListener("click", e => {
+          e.stopPropagation();
+          document.querySelectorAll(".play-menu").forEach(menu => {
+            if (menu !== playMenu) menu.style.display = "none";
+          });
+          playMenu.style.display = playMenu.style.display === "block" ? "none" : "block";
+        });
+
+        document.addEventListener("click", () => {
+          playMenu.style.display = "none";
+        });
+
+        actionsEl.appendChild(editBtn);
+        actionsEl.appendChild(deleteBtn);
+        actionsEl.appendChild(playDropdown);
+
+        kitEl.appendChild(detailsEl);
+        kitEl.appendChild(actionsEl);
+        kitListEl.appendChild(kitEl);
+      });
+    }
+
+    renderKits();
+  </script>
+</body>
+</html>
