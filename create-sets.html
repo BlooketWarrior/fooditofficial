@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Create New Kit</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 40px;
+      background-color: #FFAE42;
+      color: #000;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+    }
+    h1 {
+      margin-bottom: 10px;
+    }
+    .form-group {
+      margin-top: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 5px;
+    }
+    input[type="text"],
+    input[type="file"],
+    select,
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px 15px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+    }
+    button:disabled {
+      background-color: #ccc;
+    }
+    .button.secondary {
+      background-color: #888;
+    }
+    .hidden {
+      display: none;
+    }
+    .question-set {
+      margin-top: 30px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    .answer {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .answer input[type="text"] {
+      flex: 1;
+    }
+    .answer input[type="checkbox"] {
+      margin-left: 10px;
+    }
+    img.preview {
+      margin-top: 10px;
+      max-height: 150px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Step 1: Kit Info -->
+    <div id="kit-info">
+      <h1>Create a New Kit</h1>
+
+      <div class="form-group">
+        <label for="kit-name">Kit Name</label>
+        <input type="text" id="kit-name" placeholder="Enter kit name" />
+      </div>
+
+      <div class="form-group">
+        <label for="language">Language</label>
+        <select id="language">
+          <option disabled selected>Select a language</option>
+          <option>English</option>
+          <option>Spanish</option>
+          <option>Mandarin</option>
+          <option>Hindi</option>
+          <option>Arabic</option>
+          <option>Portuguese</option>
+          <option>Bengali</option>
+          <option>Russian</option>
+          <option>Japanese</option>
+          <option>German</option>
+          <option>Korean</option>
+          <option>French</option>
+          <option>Italian</option>
+          <option>Turkish</option>
+          <option>Vietnamese</option>
+          <option>Polish</option>
+          <option>Persian</option>
+          <option>Swahili</option>
+          <option>Urdu</option>
+          <option>Indonesian</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="subject">Subject</label>
+        <select id="subject">
+          <option disabled selected>Select a subject</option>
+          <option>Mathematics</option>
+          <option>English Language Arts</option>
+          <option>Science</option>
+          <option>Social Studies</option>
+          <option>History</option>
+          <option>Geography</option>
+          <option>Biology</option>
+          <option>Physics</option>
+          <option>Chemistry</option>
+          <option>Computer Science</option>
+          <option>Programming</option>
+          <option>Health</option>
+          <option>Art</option>
+          <option>Music</option>
+          <option>Physical Education</option>
+          <option>Drama</option>
+          <option>Economics</option>
+          <option>Business</option>
+          <option>Philosophy</option>
+          <option>Religious Studies</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="kit-image">Set Image</label>
+        <input type="file" id="kit-image" accept="image/*" onchange="previewKitImage(this)" />
+        <img id="kit-preview" class="preview" />
+      </div>
+
+      <button id="next-button" disabled onclick="goToQuestions()">Next</button>
+    </div>
+
+    <!-- Step 2: Questions -->
+    <div id="question-builder" class="hidden">
+      <h1>Question Set</h1>
+      <button onclick="addQuestion()">Add Question</button>
+
+      <div id="questions-container"></div>
+
+      <button onclick="publishKit()">Save & Publish to Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    const kitName = document.getElementById("kit-name");
+    const language = document.getElementById("language");
+    const subject = document.getElementById("subject");
+    const nextButton = document.getElementById("next-button");
+
+    kitName.addEventListener("input", validateForm);
+    language.addEventListener("change", validateForm);
+    subject.addEventListener("change", validateForm);
+
+    function validateForm() {
+      nextButton.disabled = !(kitName.value && language.value && subject.value);
+    }
+
+    function previewKitImage(input) {
+      const file = input.files[0];
+      const preview = document.getElementById("kit-preview");
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function goToQuestions() {
+      document.getElementById("kit-info").classList.add("hidden");
+      document.getElementById("question-builder").classList.remove("hidden");
+    }
+
+    function addQuestion(qData = null) {
+      const container = document.getElementById("questions-container");
+      const qIndex = container.children.length + 1;
+
+      const qDiv = document.createElement("div");
+      qDiv.classList.add("question-set");
+      qDiv.innerHTML = `
+        <div class="form-group">
+          <label>Question ${qIndex}</label>
+          <textarea placeholder="Enter question here...">${
+            qData ? qData.question : ""
+          }</textarea>
+        </div>
+        <div class="form-group">
+          <label>Answers</label>
+          ${[0, 1, 2, 3]
+            .map(
+              (i) => `
+            <div class="answer">
+              <input type="text" value="${
+                qData && qData.answers[i] ? qData.answers[i] : ""
+              }" placeholder="Answer option ${i + 1}" />
+              <input type="checkbox" ${
+                qData && qData.correct.includes(i) ? "checked" : ""
+              } title="Mark as correct" />
+            </div>`
+            )
+            .join("")}
+        </div>
+        <div class="form-group">
+          <label>Image (optional)</label>
+          <input type="file" accept="image/*" onchange="previewQuestionImage(this)" />
+          <img class="preview" />
+        </div>
+      `;
+      container.appendChild(qDiv);
+    }
+
+    function previewQuestionImage(input) {
+      const file = input.files[0];
+      const preview = input.parentNode.querySelector(".preview");
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function publishKit() {
+      const kit = {
+        id: Date.now(), // unique id for kit
+        name: kitName.value,
+        language: language.value,
+        subject: subject.value,
+        questions: [],
+      };
+
+      document.querySelectorAll(".question-set").forEach((qDiv) => {
+        const question = qDiv.querySelector("textarea").value.trim();
+        const answers = Array.from(
+          qDiv.querySelectorAll(".answer input[type='text']")
+        ).map((input) => input.value.trim());
+        const correct = Array.from(
+          qDiv.querySelectorAll(".answer input[type='checkbox']")
+        )
+          .map((cb, idx) => (cb.checked ? idx : -1))
+          .filter((i) => i !== -1);
+        kit.questions.push({ question, answers, correct });
+      });
+
+      // Save to localStorage
+      let savedKits = JSON.parse(localStorage.getItem("savedKits") || "[]");
+      savedKits.push(kit);
+      localStorage.setItem("savedKits", JSON.stringify(savedKits));
+
+      alert("Kit saved locally! Redirecting to dashboard...");
+      window.location.href = "https://foodit-official.glitch.me/dashboard.html";
+    }
+
+    // Initially add one empty question
+    addQuestion();
+  </script>
+</body>
+</html>
+
