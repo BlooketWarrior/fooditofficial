@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Foodit</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom right, #f9b233, #f57c00);
+      color: #000;
+      text-align: center;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background-color: #db6a00;
+      color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .logo {
+      font-size: 2rem;
+      background: #ffb74d; /* Changed background to match buttons */
+      color: #d76b00;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-weight: bold;
+    }
+
+    .nav-buttons button {
+      margin-left: 15px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #ffb74d;
+      cursor: pointer;
+      font-size: 1rem;
+      color: white;
+      font-weight: bold;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .nav-buttons button:hover {
+      background-color: #ff9800;
+      transform: scale(1.05);
+    }
+
+    main {
+      padding: 60px 20px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      color: #fff;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #fff;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta-button {
+      padding: 15px 40px;
+      font-size: 1.3rem;
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #e67e00;
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .sub-info {
+      margin-top: 15px;
+      font-size: 0.95rem;
+      color: #000;
+      font-style: italic;
+    }
+
+    .founder-box {
+      margin-top: 50px;
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 30px;
+      border-radius: 20px;
+      background: linear-gradient(to right, #ffb74d, #ffa726);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+      color: #3e2723;
+      text-align: left;
+    }
+
+    .founder-box p {
+      margin: 12px 0;
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #3e2723;
+    }
+
+    .founder-box strong {
+      font-size: 1.3rem;
+      color: #bf360c;
+    }
+
+    .founder-box em {
+      display: block;
+      text-align: right;
+      margin-top: 20px;
+      font-style: italic;
+      color: #5d4037;
+    }
+
+    .features-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 40px;
+      margin-top: 50px;
+    }
+
+    .feature {
+      width: 200px;
+      text-align: center;
+    }
+
+    .feature img {
+      width: 80px;
+      height: 80px;
+    }
+
+    .feature p {
+      font-size: 1rem;
+      margin-top: 10px;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .image-row {
+      margin-top: 50px;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .image-row img {
+      width: 250px;
+      max-width: 90%;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    @media (max-width: 600px) {
+      .nav-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .features-row {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">Foodit</div>
+    <div class="nav-buttons">
+      <a href="https://foodit-official.glitch.me/play.html"><button>Join a Game</button></a>
+      <a href="https://foodit-official.glitch.me/login.html"><button>Log in</button></a>
+    </div>
+  </header>
+
+  <main>
+    <h1>Fun, Free, Educational Games for Everyone!</h1>
+    <p>Play learning games that make school feel like a game show. Great for classrooms and remote learning.</p>
+    <a href="https://foodit-official.glitch.me/signup.html"><button class="cta-button">Sign Up</button></a>
+
+    <div class="sub-info">🔊 Pronounced "Food-it"</div>
+
+    <div class="founder-box">
+      <p><strong>Next level.</strong></p>
+      <p>Hi! I'm Blooket Warrior — I created Foodit because I saw a need for a fun, fan-made game that made learning feel exciting and rewarding. So I built it — for classrooms, for kids, and for the love of learning.</p>
+      <em>– Blooket W.</em>
+    </div>
+
+    <div class="features-row">
+      <div class="feature">
+        <img src="https://img.icons8.com/color/96/classroom.png" alt="Classroom Icon">
+        <p>Perfect for Classrooms and study reviews</p>
+      </div>
+      <div class="feature">
+        <img src="https://img.icons8.com/color/96/brain.png" alt="Brain Icon">
+        <p>Boosts Learning & Focus</p>
+      </div>
+      <div class="feature">
+        <img src="https://img.icons8.com/color/96/controller.png" alt="Controller Icon">
+        <p>Game-Like Engagement</p>
+      </div>
+    </div>
+
+    <div class="image-row">
+      <img src="/mnt/data/Screenshot 2025-05-10 9.07.19 PM.png" alt="Game Preview 1">
+      <img src="/mnt/data/Screenshot 2025-05-10 9.07.30 PM.png" alt="Game Preview 2">
+    </div>
+  </main>
+
+</body>
+</html>
