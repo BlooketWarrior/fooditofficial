@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Solo Game Mode | Foodit</title>
+<style>
+  body {
+    background: #1e1e2f;
+    color: #f0f0f5;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    min-height: 100vh;
+  }
+  h1 {
+    color: #ffd54f;
+    margin-bottom: 1rem;
+  }
+  label {
+    display: block;
+    margin-top: 1rem;
+    font-weight: 600;
+    color: #b2ff59;
+  }
+  select {
+    margin-top: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: none;
+    outline: none;
+    width: 300px;
+  }
+  button {
+    margin-top: 2rem;
+    padding: 0.75rem 2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #222;
+    background-color: #ffd54f;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  button:disabled {
+    background-color: #a89f63;
+    cursor: not-allowed;
+  }
+  button:hover:not(:disabled) {
+    background-color: #ffc107;
+  }
+  .message {
+    margin-top: 1rem;
+    font-style: italic;
+    color: #b2ff59;
+  }
+</style>
+</head>
+<body>
+  <h1>Select Your Question Set & Game Mode</h1>
+
+  <label for="questionSet">Choose Question Set:</label>
+  <select id="questionSet">
+    <option value="">-- Loading your sets... --</option>
+  </select>
+
+  <label for="gameMode">Choose Game Mode:</label>
+  <select id="gameMode">
+    <option value="">-- Select a mode --</option>
+    <option value="solo">Solo</option>
+    <option value="timed">Timed</option>
+    <option value="challenge">Challenge</option>
+  </select>
+
+  <button id="startBtn" disabled>Start Game</button>
+
+  <div class="message" id="message"></div>
+
+<script>
+  const questionSetSelect = document.getElementById('questionSet');
+  const gameModeSelect = document.getElementById('gameMode');
+  const startBtn = document.getElementById('startBtn');
+  const messageDiv = document.getElementById('message');
+
+  function loadUserSets() {
+    const rawSets = localStorage.getItem('savedKits'); // <-- Changed key from "questionSets" to "savedKits"
+    if (!rawSets) {
+      questionSetSelect.innerHTML = '<option value="">No sets found. Create some on the Dashboard.</option>';
+      return;
+    }
+    try {
+      const setsArray = JSON.parse(rawSets);
+      if (!Array.isArray(setsArray) || setsArray.length === 0) {
+        questionSetSelect.innerHTML = '<option value="">No sets found. Create some on the Dashboard.</option>';
+        return;
+      }
+      questionSetSelect.innerHTML = '<option value="">-- Select a set --</option>';
+      setsArray.forEach((set, index) => {
+        const val = JSON.stringify({ set, index });
+        const option = document.createElement('option');
+        option.value = val;
+        option.textContent = set.name || 'Unnamed Set';
+        questionSetSelect.appendChild(option);
+      });
+    } catch (e) {
+      questionSetSelect.innerHTML = '<option value="">Error loading sets. Try re-saving your sets.</option>';
+      console.error('Failed to parse sets:', e);
+    }
+  }
+
+  function updateStartButton() {
+    const setVal = questionSetSelect.value;
+    const modeVal = gameModeSelect.value;
+
+    if (setVal && modeVal) {
+      startBtn.disabled = false;
+      let setName = '';
+      try {
+        setName = JSON.parse(setVal).set.name || 'Unnamed Set';
+      } catch {
+        setName = 'Unnamed Set';
+      }
+      messageDiv.textContent = `Ready to start "${modeVal.toUpperCase()}" mode with set "${setName}"`;
+      messageDiv.style.color = '#b2ff59';
+    } else {
+      startBtn.disabled = true;
+      messageDiv.textContent = 'Please select both a question set and a game mode.';
+      messageDiv.style.color = '#f44336';
+    }
+  }
+
+  questionSetSelect.addEventListener('change', updateStartButton);
+  gameModeSelect.addEventListener('change', updateStartButton);
+
+  startBtn.addEventListener('click', () => {
+    const setVal = questionSetSelect.value;
+    const modeVal = gameModeSelect.value;
+
+    if (!setVal || !modeVal) {
+      alert('Please select both a question set and a game mode.');
+      return;
+    }
+
+    localStorage.setItem('selectedQuestionSet', setVal);
+    localStorage.setItem('selectedGameMode', modeVal);
+
+    let page = '';
+    switch (modeVal) {
+      case 'solo':
+        page = 'study.html';
+        break;
+      case 'timed':
+        page = 'timed.html';
+        break;
+      case 'challenge':
+        page = 'challenge.html';
+        break;
+      default:
+        alert('Unknown game mode selected.');
+        return;
+    }
+    window.location.href = page;
+  });
+
+  window.addEventListener('load', () => {
+    loadUserSets();
+    try {
+      const savedSet = localStorage.getItem('selectedQuestionSet');
+      if (savedSet) questionSetSelect.value = savedSet;
+      const savedMode = localStorage.getItem('selectedGameMode');
+      if (savedMode) gameModeSelect.value = savedMode;
+    } catch {}
+    updateStartButton();
+  });
+</script>
+</body>
+</html>
