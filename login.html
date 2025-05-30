@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Foodit Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #d98d06;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: orange;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      width: 300px;
+    }
+    h1 {
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 0;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button, a.discord-btn {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .discord-btn {
+      background-color: #7289da;
+      color: white;
+    }
+    .login-btn {
+      background-color: #4caf50;
+      color: white;
+    }
+    .footer {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+    }
+    .footer a {
+      color: blue;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FOODIT LOGIN</h1>
+
+    <!-- Discord Login -->
+    <a
+      class="discord-btn"
+      href="https://discord.com/api/oauth2/authorize?client_id=1371204847625572442&redirect_uri=https%3A%2F%2Ffoodit-game.glitch.me%2Fauth%2Fdiscord%2Fdashboard.html&response_type=token&scope=identify"
+    >
+      🔗 Sign in with Discord
+    </a>
+
+    <!-- Username Login -->
+    <input type="text" id="username" placeholder="👤 Username" />
+    <input type="password" id="password" placeholder="🔒 Password" />
+    <button class="login-btn" onclick="handleUsernameLogin()">Login with Username</button>
+
+    <div class="footer">
+      Don't have an account? <a href="https://foodit-official.glitch.me/signup.html" target="_blank">Sign up here</a>
+    </div>
+  </div>
+
+  <script>
+    function handleUsernameLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+
+      const savedUsername = localStorage.getItem('fooditUsername');
+      const savedPassword = localStorage.getItem('fooditPassword');
+
+      if (username === savedUsername && password === savedPassword) {
+        alert("Login successful!");
+        window.location.href = "https://foodit-official.glitch.me/dashboard.html";
+      } else {
+        alert("Invalid credentials. Make sure you've signed up at the signup link.");
+      }
+    }
+  </script>
+</body>
+</html>
