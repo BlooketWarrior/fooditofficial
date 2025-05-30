@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Foodit Setup</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #d98d06;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: orange;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      width: 300px;
+    }
+    h1 {
+      text-align: center;
+      font-family: 'Segoe UI', sans-serif;
+      margin-top: 0;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button, a.discord-btn {
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      display: block;
+      text-align: center;
+      text-decoration: none;
+    }
+    .discord-btn {
+      background-color: #7289da;
+      color: white;
+      cursor: pointer;
+    }
+    .create-btn {
+      background-color: #4caf50;
+      color: white;
+      cursor: pointer;
+    }
+    .footer {
+      font-size: 12px;
+      text-align: center;
+      margin-top: 20px;
+      color: #555;
+    }
+    .footer a {
+      color: blue;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .lock {
+      font-size: 20px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>FOODIT</h1>
+
+    <!-- Login Section -->
+    <div id="login-section">
+      <!-- Discord Login -->
+      <a
+        class="discord-btn"
+        href="https://discord.com/api/oauth2/authorize?client_id=1371204847625572442&redirect_uri=https%3A%2F%2Ffoodit-game.glitch.me%2Fauth%2Fdiscord%2Fdashboard.html&response_type=token&scope=identify"
+      >
+        🔗 Sign in with Discord
+      </a>
+    </div>
+
+    <!-- Setup Section -->
+    <form id="setup-section">
+      <!-- Create Account Section -->
+      <label for="username">👤 Create Username</label>
+      <input type="text" id="username" placeholder="Enter username" />
+
+      <label for="password">🔒 Password</label>
+      <input type="password" id="password" placeholder="Enter password" />
+
+      <label for="expertise">💡 Area of Expertise</label>
+      <select name="expertise" id="expertise">
+        <option selected disabled>Select one...</option>
+        <option>American Sign Language</option>
+        <option>Arts</option>
+        <option>Communications</option>
+        <option>Computer Science</option>
+        <option>Counselor</option>
+        <option>Deaf Education</option>
+        <option>Engineering</option>
+        <option>English Language Learner (ELL)</option>
+      </select>
+
+      <label for="grade">🎂 Grade Level</label>
+      <select name="grade" id="grade">
+        <option selected disabled>Select one...</option>
+        <option>Pre-K</option>
+        <option>Elementary School</option>
+        <option>Middle School</option>
+        <option>High School</option>
+        <option>Post High School</option>
+        <option>Other School</option>
+        <option>Not Using For School</option>
+        <option>Other</option>
+      </select>
+
+      <!-- Terms checkbox -->
+      <label style="margin-top: 15px;">
+        <input type="checkbox" id="agreeTerms" />
+        I agree to the <a onclick="toggleTerms()">Privacy Policy</a> and <a onclick="toggleTerms()">Terms of Service</a>
+      </label>
+
+      <!-- Create Account Button -->
+      <button type="button" class="create-btn" onclick="handleCreateAccount()">Create Account</button>
+
+      <div id="terms-box" class="hidden" style="margin-top: 15px; font-size: 13px; color: #333;">
+        <p>
+          These are example Terms of Service. Replace this text with your own terms.<br><br>
+          Once you have read and accepted the terms, you may continue.
+        </p>
+        <button onclick="goToDashboard()" style="width: 100%; padding: 12px; background-color: #1976d2; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Continue to Dashboard</button>
+      </div>
+    </form>
+
+    <div class="lock">🔒</div>
+  </div>
+
+  <script>
+    // Handle Discord OAuth2 token
+    const hash = window.location.hash;
+    if (hash.includes("access_token")) {
+      const params = new URLSearchParams(hash.substring(1));
+      const token = params.get("access_token");
+      if (token) {
+        localStorage.setItem('discordToken', token);
+
+        fetch("https://discord.com/api/users/@me", {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(user => {
+          localStorage.setItem("discordUsername", user.username);
+          window.location.href = "https://foodit-official.glitch.me/auth/discord/dashboard.html";
+        })
+        .catch(() => {
+          alert("Discord login failed. Try again.");
+          window.location.href = "https://foodit-official.glitch.me";
+        });
+      }
+    }
+
+    function checkDiscordLogin() {
+      const hash = window.location.hash;
+      if (hash) {
+        const params = new URLSearchParams(hash.substring(1));
+        const token = params.get("access_token");
+        if (token) {
+          localStorage.setItem('discordToken', token);
+          document.getElementById('login-section').classList.add('hidden');
+          document.getElementById('setup-section').classList.remove('hidden');
+          window.location.href = "https://foodit-official.glitch.me/auth/discord/dashboard.html";
+        }
+      }
+    }
+
+    checkDiscordLogin();
+
+    function handleCreateAccount() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const expertise = document.getElementById('expertise').value;
+      const grade = document.getElementById('grade').value;
+      const agreed = document.getElementById('agreeTerms').checked;
+
+      if (!agreed) {
+        alert("You must agree to the Privacy Policy and Terms of Service.");
+        return;
+      }
+
+      if (username && password && expertise !== "Select one..." && grade !== "Select one...") {
+        localStorage.setItem('fooditUsername', username);
+        localStorage.setItem('fooditPassword', password);
+        localStorage.setItem('fooditExpertise', expertise);
+        localStorage.setItem('fooditGrade', grade);
+        goToDashboard();
+      } else {
+        alert("Please fill in all the required fields.");
+      }
+    }
+
+    function toggleTerms() {
+      document.getElementById('terms-box').classList.remove('hidden');
+    }
+
+    function goToDashboard() {
+      window.location.href = "https://foodit-official.glitch.me/dashboard.html";
+    }
+  </script>
+</body>
+</html>
