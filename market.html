@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pack Opening</title>
+  <style>
+    /* Your existing styles unchanged... */
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom right, #d98d06, #b87807);
+      color: white;
+      text-align: center;
+    }
+
+    header {
+      background: #db6a00;
+      color: white;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a.active {
+      color: #fff;
+    }
+
+    nav input[type="text"] {
+      padding: 5px;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .profile {
+      position: relative;
+      cursor: pointer;
+    }
+
+    .profile:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 30px;
+      right: 0;
+      background-color: #ffff;
+      padding: 10px;
+      border-radius: 4px;
+      z-index: 10;
+    }
+
+    .dropdown-content a {
+      display: block;
+      color: black;
+      padding: 5px 10px;
+      text-decoration: none;
+    }
+
+    .dropdown-content a:hover {
+      background: #fff;
+    }
+
+    .container {
+      padding: 40px 20px;
+    }
+
+    .title {
+      font-size: 32px;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+
+    .token-display {
+      font-size: 18px;
+      margin: 10px;
+    }
+
+    .packs {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .pack {
+      border-radius: 10px;
+      padding: 10px;
+      width: 180px;
+      color: black;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+      cursor: pointer;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .pack[data-pack="atlas"] { background: #e8d568; }
+    .pack[data-pack="bug"] { background: #9be564; }
+    .pack[data-pack="retro"] { background: #68c5e8; }
+
+    .pack-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #000;
+    }
+
+    .pack-wrapper {
+      position: relative;
+      width: 100%;
+      height: 260px;
+    }
+
+    .pack-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .pack.open .pack-inner {
+      transform: rotateY(180deg) scale(1.05);
+    }
+
+    .pack-front,
+    .pack-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 5px;
+    }
+
+    .pack-front img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .pack-price {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .pack-back {
+      background: #fff;
+      transform: rotateY(180deg);
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow-y: auto;
+    }
+
+    .blook {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .blook img {
+      width: 60px;
+      height: 60px;
+      object-fit: contain;
+      margin-bottom: 5px;
+    }
+
+    .rarity {
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .common { color: white; }
+    .uncommon { color: green; }
+    .rare { color: blue; }
+    .epic { color: red; }
+    .legendary { color: orange; }
+    .chroma { color: cyan; }
+    .unique { color: teal; }
+    .mystical { color: purple; }
+    .heavenly { color: pink; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">FOODIT</div>
+    <nav>
+      <a href="dashboard.html" class="active">Dashboard</a>
+      <a href="reports.html">Reports</a>
+      <a href="assignments.html">Assignments</a>
+      <a href="classes.html">Classes</a>
+      <a href="market.html">Market</a>
+      <a href="foods.html">Foods</a>
+      <a href="play.html">Play</a>
+      <a href="pass.html">Pass</a>
+      <input type="text" placeholder="Search for kits..." />
+      <div class="profile">👤 <span id="profile-name">Guest</span>
+        <div class="dropdown-content">
+          <a href="settings.html" id="settings-link">Settings</a>
+          <a href="#" id="logout-link">Logout</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <div class="container">
+    <div class="title">PACKS</div>
+    <div class="subtitle">Open packs to earn new items that you can use in-game!</div>
+    <div class="token-display">🪙 Tokens: <span id="token-count">0</span></div>
+    <div class="packs">
+      <!-- Blooket Warrior Pack -->
+      <div class="pack" data-pack="atlas" onclick="openPack(this)">
+        <div class="pack-name">Blooket Warrior Pack</div>
+        <div class="pack-wrapper">
+          <div class="pack-inner">
+            <div class="pack-front">
+              <img src="https://www.slazzer.com/downloads/bbc1534d-3822-11f0-bc6b-07c6599f2f6d/Blooket%20Warrior%20%285%29_prev_ui.png" alt="Blooket Warrior Pack">
+              <div class="pack-price">💰 30</div>
+            </div>
+            <div class="pack-back"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bug Pack -->
+      <div class="pack" data-pack="bug" onclick="openPack(this)">
+        <div class="pack-name">Bug Pack</div>
+        <div class="pack-wrapper">
+          <div class="pack-inner">
+            <div class="pack-front">
+              <img src="bug-pack.png" alt="Bug Pack">
+              <div class="pack-price">💰 20</div>
+            </div>
+            <div class="pack-back"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Retro Pack -->
+      <div class="pack" data-pack="retro" onclick="openPack(this)">
+        <div class="pack-name">Retro Pack</div>
+        <div class="pack-wrapper">
+          <div class="pack-inner">
+            <div class="pack-front">
+              <img src="retro-pack.png" alt="Retro Pack">
+              <div class="pack-price">💰 40</div>
+            </div>
+            <div class="pack-back"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <audio id="open-sound" src="open.mp3" preload="auto"></audio>
+
+  <script>
+    const tokenDisplay = document.getElementById("token-count");
+    const TOKEN_KEY = "tokens";
+
+    // Load tokens from localStorage or default 0
+    function getTokens() {
+      return parseInt(localStorage.getItem(TOKEN_KEY)) || 0;
+    }
+
+    function setTokens(amount) {
+      localStorage.setItem(TOKEN_KEY, amount);
+      tokenDisplay.textContent = amount;
+    }
+
+    // Initialize display
+    setTokens(getTokens());
+
+    // Pack prices keyed by data-pack
+    const packPrices = {
+      atlas: 30,
+      bug: 20,
+      retro: 40
+    };
+
+    // Packs drop data
+    const blookDrops = {
+      atlas: [
+        { name: "Blooket Warrior", img: "blook1.png", rarity: "common", chance: 0.7},
+        { name: "Explorer", img: "blook2.png", rarity: "rare", chance: 0.25 },
+        { name: "Treasure Chest", img: "blook3.png", rarity: "legendary", chance: 0.05 }
+      ],
+      bug: [
+        { name: "Bug Buddy", img: "blook4.png", rarity: "common", chance: 0.6 },
+        { name: "Bee Bot", img: "blook5.png", rarity: "epic", chance: 0.35 },
+        { name: "Queen Bug", img: "blook6.png", rarity: "legendary", chance: 0.05 }
+      ],
+      retro: [
+        { name: "Pixel Cat", img: "blook7.png", rarity: "common", chance: 0.8 },
+        { name: "Arcade Alien", img: "blook8.png", rarity: "rare", chance: 0.15 },
+        { name: "Retro Robot", img: "blook9.png", rarity: "epic", chance: 0.05 }
+      ]
+    };
+
+    // Helper to pick blook based on chance
+    function pickBlook(packName) {
+      const pool = blookDrops[packName];
+      const rand = Math.random();
+      let sum = 0;
+      for (const blook of pool) {
+        sum += blook.chance;
+        if (rand <= sum) {
+          return blook;
+        }
+      }
+      // fallback to last blook
+      return pool[pool.length - 1];
+    }
+
+    function openPack(packElement) {
+      const packName = packElement.getAttribute("data-pack");
+      const price = packPrices[packName];
+      const currentTokens = getTokens();
+
+      if (currentTokens < price) {
+        alert("You don't have enough tokens to open this pack.");
+        return;
+      }
+
+      // Deduct tokens
+      setTokens(currentTokens - price);
+
+      // Play sound
+      const audio = document.getElementById("open-sound");
+      audio.currentTime = 0;
+      audio.play();
+
+      // Pick blook and show
+      const blook = pickBlook(packName);
+      const back = packElement.querySelector(".pack-back");
+      back.innerHTML = `
+        <div class="blook">
+          <img src="${blook.img}" alt="${blook.name}" />
+          <div>${blook.name}</div>
+          <div class="rarity ${blook.rarity}">${blook.rarity.toUpperCase()}</div>
+        </div>
+      `;
+
+      packElement.classList.add("open");
+
+      // Optional: After some time, close pack back
+      setTimeout(() => {
+        packElement.classList.remove("open");
+      }, 4000);
+    }
+
+    // Listen for storage changes to sync tokens live across tabs/windows
+    window.addEventListener("storage", (e) => {
+      if (e.key === TOKEN_KEY) {
+        const newTokens = parseInt(e.newValue) || 0;
+        tokenDisplay.textContent = newTokens;
+      }
+    });
+  </script>
+</body>
+</html>
